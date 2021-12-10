@@ -17,10 +17,6 @@ visuals_pt2_df = pd.read_csv('data/2_visuals_pt2.csv', encoding='ISO-8859-1')
 visuals_pt3_df = pd.read_csv('data/2_visuals_pt3.csv', encoding='ISO-8859-1')
 visuals_pt4_df = pd.read_csv('data/2_visuals_pt4.csv', encoding='ISO-8859-1')
 
-# counties_df = pd.read_csv('data/counties.csv', encoding='ISO-8859-1')
-# product_categories_df = pd.read_csv('data/product_categories.csv', encoding='ISO-8859-1')
-# regions_df = pd.read_csv('data/regions.csv', encoding='ISO-8859-1')
-
 # 3rd visual dataframes
 top10_hourly_sale_df = visuals_pt3_df.sort_values(by='amount_in_gbp', ascending=False).head(10)
 top10_hourly_sale_chart = px.bar(top10_hourly_sale_df, x='branch', y='amount_in_gbp', title='Top 10 performing branches by sales per hour')
@@ -62,9 +58,7 @@ app.layout = html.Div([
                             html.P('Select product purchases detail:'),        
                             dcc.Dropdown(
                                 id='products-second-dropdown', 
-                                options=[
-                                    {'label': 'none', 'value': 'none'}
-                                ],
+                                options=[],
                                 placeholder='First, select view',
                                 disabled=True
                             ),
@@ -98,17 +92,12 @@ app.layout = html.Div([
                 dbc.Col(
                     dcc.Dropdown(
                         id='branches-performance-dropdown',
-                        # options=[
-                        #     {'label': 'Overall', 'value': 'overall'},
-                        #     {'label': 'Per region', 'value': 'per_region'},
-                        #     {'label': 'Per county', 'value': 'per_county'}
-                        # ],
                         options=[
                             {'label': 'Overall', 'value': 'branch'},
                             {'label': 'Per region', 'value': 'region'},
                             {'label': 'Per county', 'value': 'county'}
                         ],
-                        placeholder='Select your view'
+                        placeholder='Select view'
                     )
                 ),
                 dbc.Col()
@@ -183,10 +172,11 @@ app.layout = html.Div([
 @app.callback(
     Output(component_id='chart-products-top5', component_property='figure'),
     Output(component_id='chart-products-bottom5', component_property='figure'),
-    Input(component_id='products-first-dropdown', component_property='value')
+    Input(component_id='products-first-dropdown', component_property='value'),
+    Input(component_id='products-second-dropdown', component_property='value'),    
 )
 
-def update_products_drilldown(first_selection):
+def update_products_drilldown(first_selection, second_selection):
     if first_selection == 'overall':
         # get visual
         visuals_pt1_df_overall = visuals_pt1_df.groupby('product').sum().reset_index().sort_values(by='qty',ascending=False)
@@ -195,8 +185,16 @@ def update_products_drilldown(first_selection):
         bottomfigure_df = visuals_pt1_df_overall.tail(5)
         bottomfigure_chart = px.bar(bottomfigure_df, x='product', y='qty', title='Bottom 5 products overall', labels={'product': '', 'qty': 'Quantity of purchased products'})
         return topfigure_chart, bottomfigure_chart
+    elif first_selection != 'overall' and second_selection is not None:
+        visuals_pt1_df_region = visuals_pt1_df[visuals_pt1_df[first_selection] == second_selection].groupby('product').sum().reset_index().sort_values(by='qty',ascending=False)
+        topfigure_df = visuals_pt1_df_region.head(5)
+        topfigure_chart = px.bar(topfigure_df, x='product', y='qty', title=f'Top 5 products: {second_selection}', labels={'product': '', 'qty': 'Quantity of purchased products'})
+        bottomfigure_df = visuals_pt1_df_region.tail(5)
+        bottomfigure_chart = px.bar(bottomfigure_df, x='product', y='qty', title=f'Bottom 5 products: {second_selection}', labels={'product': '', 'qty': 'Quantity of purchased products'})
+        return topfigure_chart, bottomfigure_chart
     else:
         return {}, {}
+
     # 1st visual dropdown #############################
 @app.callback(
     Output(component_id='products-second-dropdown', component_property='disabled'),
