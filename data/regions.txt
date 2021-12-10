@@ -1,0 +1,14 @@
+[
+{'label':'East Midlands', 'value': 'East Midlands'},
+{'label':'East of England', 'value':'East of England'},
+{'label':'London', 'value':'London'},
+{'label':'North East England', 'value':'North East England'},
+{'label':'North West England', 'value':'North West England'},
+{'label':'Northern Ireland', 'value':'Northern Ireland'},
+{'label':'Scotland', 'value':'Scotland'},
+{'label':'South East England', 'value':'South East England'},
+{'label':'South West England', 'value':'South West England'},
+{'label':'Wales', 'value':'Wales'},
+{'label':'West Midlands', 'value':'West Midlands'},
+{'label':'Yorkshire and the Humber','value':'Yorkshire and the Humber'},
+]

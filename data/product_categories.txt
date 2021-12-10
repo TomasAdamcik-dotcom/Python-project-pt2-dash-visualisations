@@ -1,0 +1,11 @@
+[
+{'label': 'appliances', 'value': 'appliances'},
+{'label': 'bakery', 'value': 'bakery'},
+{'label': 'clothing', 'value': 'clothing'},
+{'label': 'computing', 'value': 'computing'},
+{'label': 'dairy', 'value': 'dairy'},
+{'label': 'fruits & vegetable', 'value': 'fruits & vegetable'},
+{'label': 'fruits & vegetables', 'value': 'fruits & vegetables'},
+{'label': 'gaming', 'value': 'gaming'},
+{'label': 'meat & fish', 'value': 'meat & fish'},
+]
