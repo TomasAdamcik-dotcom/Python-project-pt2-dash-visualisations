@@ -138,7 +138,7 @@ app.layout = html.Div(
                             dbc.Col(
                                 html.Div(
                                     html.H2(
-                                        "Branches performance outlook - need to fix logic (branches per region, branches per county)"
+                                        "Branches performance outlook"
                                     )
                                 )
                             )
@@ -147,7 +147,7 @@ app.layout = html.Div(
                             [
                                 dbc.Col(
                                     dcc.Dropdown(
-                                        id="branches-performance-dropdown",
+                                        id="branches-first-dropdown",
                                         options=[
                                             {"label": "Overall", "value": "branch"},
                                             {"label": "Per region", "value": "region"},
@@ -157,7 +157,15 @@ app.layout = html.Div(
                                         className='dropdown',
                                     )
                                 ),
-                                dbc.Col(),
+                                dbc.Col(
+                                    dcc.Dropdown(
+                                        id="branches-second-dropdown",
+                                        options=[],
+                                        placeholder="First, select view",
+                                        className='dropdown',
+                                        disabled=True,
+                                    )
+                                ),
                             ]
                         ),
                         dbc.Row(
@@ -226,7 +234,6 @@ app.layout = html.Div(
             ]
         ),        
     ],
-    className="test",
 )
 
 
@@ -297,7 +304,7 @@ def update_products_drilldown(first_selection, second_selection):
 
     # 1st visual dropdown #############################
 
-
+#       1st visual dropdown list logic ################
 @app.callback(
     Output(component_id="products-second-dropdown", component_property="disabled"),
     Output(component_id="products-second-dropdown", component_property="options"),
@@ -329,10 +336,11 @@ def update_second_drilldown(first_drilldown_selection):
     Output(component_id="bottom10-sales-branch", component_property="figure"),
     Output(component_id="top10-qty-branch", component_property="figure"),
     Output(component_id="bottom10-qty-branch", component_property="figure"),
-    Input(component_id="branches-performance-dropdown", component_property="value"),
+    Input(component_id="branches-first-dropdown", component_property="value"),
+    Input(component_id="branches-second-dropdown", component_property="value"),
 )
-def update_branches_performance(dropdown_selection):
-    if dropdown_selection is not None:
+def update_branches_performance(first_dropdown_selection, second_dropdown_selection):
+    if first_dropdown_selection == 'branch':
         charts_labels = {
             "branch": "",
             "region": "",
@@ -341,7 +349,7 @@ def update_branches_performance(dropdown_selection):
             "qty": "Quantity sold",
         }
         sales_df = (
-            visuals_pt2_df.groupby(dropdown_selection)
+            visuals_pt2_df.groupby(first_dropdown_selection)
             .sum()
             .reset_index()
             .sort_values(by="amount_in_gbp", ascending=False)
@@ -349,23 +357,23 @@ def update_branches_performance(dropdown_selection):
         top10_sales_df = sales_df.head(10)
         top10_sales_chart = px.bar(
             top10_sales_df,
-            x=dropdown_selection,
+            x=first_dropdown_selection,
             y="amount_in_gbp",
-            title="Top 10 regions by sales",
+            title="Top 10 branches by sales",
             labels=charts_labels,
         ).update_layout(title_x=0.5, title_y=0.85)
 
         bottom10_sales_df = sales_df.tail(10)
         bottom10_sales_chart = px.bar(
             bottom10_sales_df,
-            x=dropdown_selection,
+            x=first_dropdown_selection,
             y="amount_in_gbp",
-            title="Bottom 10 regions by sales",
+            title="Bottom 10 branches by sales",
             labels=charts_labels,
         ).update_layout(title_x=0.5, title_y=0.85)
 
         qty_df = (
-            visuals_pt2_df.groupby(dropdown_selection)
+            visuals_pt2_df.groupby(first_dropdown_selection)
             .sum()
             .reset_index()
             .sort_values(by="qty", ascending=False)
@@ -373,18 +381,18 @@ def update_branches_performance(dropdown_selection):
         top10_qty_df = qty_df.head(10)
         top10_qty_chart = px.bar(
             top10_qty_df,
-            x=dropdown_selection,
+            x=first_dropdown_selection,
             y="qty",
-            title="Top 10 regions by sold products",
+            title="Top 10 branches by sold products",
             labels=charts_labels,
         ).update_layout(title_x=0.5, title_y=0.85)
 
         bottom10_qty_df = qty_df.tail(10)
         bottom10_qty_chart = px.bar(
             bottom10_qty_df,
-            x=dropdown_selection,
+            x=first_dropdown_selection,
             y="qty",
-            title="Bottom 10 regions by sold products",
+            title="Bottom 10 branches by sold products",
             labels=charts_labels,
         ).update_layout(title_x=0.5, title_y=0.85)
 
@@ -394,9 +402,82 @@ def update_branches_performance(dropdown_selection):
             top10_qty_chart,
             bottom10_qty_chart,
         )
+    elif first_dropdown_selection != 'branch' and second_dropdown_selection is not None:
+        charts_labels = {
+            "branch": "",
+            "region": "",
+            "county": "",
+            "amount_in_gbp": "Sales in GBP",
+            "qty": "Quantity sold",
+        }
+        sales_df = (
+            visuals_pt2_df[visuals_pt2_df[first_dropdown_selection] == second_dropdown_selection]
+            .sort_values(by="amount_in_gbp", ascending=False)
+        )       
+        top10_sales_df = sales_df.head(10)
+        top10_sales_chart = px.bar(
+            top10_sales_df,
+            x='branch',
+            y="amount_in_gbp",
+            title=f"Top 10 by sales: {second_dropdown_selection}",
+            labels=charts_labels,
+        ).update_layout(title_x=0.5, title_y=0.85)
+        
+        bottom10_sales_df = sales_df.tail(10)
+        bottom10_sales_chart = px.bar(
+            bottom10_sales_df,
+            x='branch',
+            y="amount_in_gbp",
+            title=f"Bottom 10 by sales: {second_dropdown_selection}",
+            labels=charts_labels,
+        ).update_layout(title_x=0.5, title_y=0.85)
+
+        qty_df = (
+            visuals_pt2_df[visuals_pt2_df[first_dropdown_selection] == second_dropdown_selection]
+            .sort_values(by="qty", ascending=False)
+        )        
+
+        top10_qty_df = qty_df.head(10)
+        top10_qty_chart = px.bar(
+            top10_qty_df,
+            x='branch',
+            y="qty",
+            title=f"Top 10 by sold quantity: {second_dropdown_selection}",
+            labels=charts_labels,
+        ).update_layout(title_x=0.5, title_y=0.85)
+        
+        bottom10_qty_df = qty_df.tail(10)
+        bottom10_qty_chart = px.bar(
+            bottom10_qty_df,
+            x='branch',
+            y="qty",
+            title=f"Bottom 10 by sold quantity: {second_dropdown_selection}",
+            labels=charts_labels,
+        ).update_layout(title_x=0.5, title_y=0.85)
+        
+        
+        return top10_sales_chart, bottom10_sales_chart, top10_qty_chart, bottom10_qty_chart
     else:
         return {}, {}, {}, {}
 
+#       2nd visual dropdown list logic ################
+@app.callback(
+    Output(component_id="branches-second-dropdown", component_property="disabled"),
+    Output(component_id="branches-second-dropdown", component_property="options"),
+    Output(component_id="branches-second-dropdown", component_property="placeholder"),
+    Input(component_id="branches-first-dropdown", component_property="value"),
+)
+def update_second_drilldown(first_drilldown_selection):
+    if first_drilldown_selection == "region":
+        with open("data/regions.txt") as f:
+            options = literal_eval(f.read())
+        return False, options, f"Please select {first_drilldown_selection}"
+    elif first_drilldown_selection == "county":
+        with open("data/counties.txt") as f:
+            options = literal_eval(f.read())
+        return False, options, f"Please select {first_drilldown_selection}"
+    else:
+        return True, [], "First, select view"
 
 # run
 app.run_server(debug=True)
