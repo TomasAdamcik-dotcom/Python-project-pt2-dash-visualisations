@@ -26,3 +26,4 @@ tenacity==8.0.1
 tomli==1.2.2
 typing-extensions==4.0.1
 Werkzeug==2.0.2
+pip install whitenoise

@@ -10,10 +10,14 @@ from pandas.io.pytables import Selection
 import plotly.express as px
 import csv
 from ast import literal_eval
+from whitenoise import WhiteNoise
+
 
 # initialisations
 app = dash.Dash("", external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
+server.wsgi_app = WhiteNoise(server.wsgi_app, root='assets/')
+
 visuals_pt1_df = pd.read_csv("data/2_visuals_pt1.csv", encoding="ISO-8859-1")
 visuals_pt2_df = pd.read_csv("data/2_visuals_pt2.csv", encoding="ISO-8859-1")
 visuals_pt3_df = pd.read_csv("data/2_visuals_pt3.csv", encoding="ISO-8859-1")
