@@ -14,7 +14,7 @@ from whitenoise import WhiteNoise
 
 
 # initialisations
-app = dash.Dash("", external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash("", external_stylesheets=[dbc.themes.BOOTSTRAP, 'assets/styles.css', 'styles.css'])
 server = app.server
 server.wsgi_app = WhiteNoise(server.wsgi_app, root='assets/')
 
