@@ -1,6 +1,6 @@
 # Python project part two - Consumer behaviour dashboard
 
-Deployed on [Heroku]('https://python-project-pt2-visuals.herokuapp.com/')
+Deployed on [Heroku](https://python-project-pt2-visuals.herokuapp.com/)
 
 ---
 
