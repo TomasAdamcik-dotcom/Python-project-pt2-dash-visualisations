@@ -8,6 +8,7 @@ Deployed on [Heroku](https://python-project-pt2-visuals.herokuapp.com/)
 The administration of a well known retail store is interested in using data collected over time from their various branches to understand consumer behaviour in the different regions of the country. Our plan is to create interactive visualisations for them generated from their data which tells a story about their customers.
 They’ve provided 10 years worth of data collected from all available branches. The data is inconsistent in terms of format and content as the data collection and storage strategy is decided by the manager of a store branch.
 This project is split into two parts, data cleaning and visualisations. This is the visualisation part.
+
 ---
 
 ## User stories
@@ -36,7 +37,7 @@ This project is split into two parts, data cleaning and visualisations. This is 
 ## Taken approach
 
 1. Wrote down user stories based on project brief
-2. Extract what data fields are going to be needed to achieve customers requirements
+2. Extracted data fields that are going to be needed to achieve customers requirements
 3. From provided data, extracted csv files for each visualisation. More on this process on [Project part one GitHub page]('https://github.com/TomasAdamcik-dotcom/Python-project-pt1-data-cleaning')
 4. Created wireframes of each separate visual
 ![Wireframes](/schemas/wireframes.jpg)
