@@ -1,1 +1,1 @@
-web: gunicorn filename:variable
+web: gunicorn index:server
