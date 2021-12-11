@@ -13,6 +13,7 @@ from ast import literal_eval
 
 # initialisations
 app = dash.Dash("", external_stylesheets=[dbc.themes.BOOTSTRAP])
+server = app.server
 visuals_pt1_df = pd.read_csv("data/2_visuals_pt1.csv", encoding="ISO-8859-1")
 visuals_pt2_df = pd.read_csv("data/2_visuals_pt2.csv", encoding="ISO-8859-1")
 visuals_pt3_df = pd.read_csv("data/2_visuals_pt3.csv", encoding="ISO-8859-1")
@@ -480,4 +481,5 @@ def update_second_drilldown(first_drilldown_selection):
         return True, [], "First, select view"
 
 # run
-app.run_server(debug=True)
+if __name__ == '__main__':
+    app.run_server(debug=True)
