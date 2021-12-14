@@ -38,7 +38,7 @@ This project is split into two parts, data cleaning and visualisations. This is 
 
 1. Wrote down user stories based on project brief
 2. Extracted data fields that are going to be needed to achieve customers requirements
-3. From provided data, extracted csv files for each visualisation. More on this process on [Project part one GitHub page]('https://github.com/TomasAdamcik-dotcom/Python-project-pt1-data-cleaning')
+3. From provided data, extracted csv files for each visualisation. More on this process on [Project part one GitHub page](https://github.com/TomasAdamcik-dotcom/Python-project-pt1-data-cleaning)
 4. Created wireframes of each separate visual
 ![Wireframes](/schemas/wireframes.jpg)
 5. Worked from last visual to the first - last visuals seemed easier to create than the first one and I needed to refresh dash
