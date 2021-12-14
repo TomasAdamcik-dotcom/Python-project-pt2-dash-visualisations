@@ -61,7 +61,7 @@ This project is split into two parts, data cleaning and visualisations. This is 
 ---
 ## Difficulties during development
 - When starting to build 1st drilldown, I ended up stuck on using two separate drilldowns and a submit button to subtmit selections. After I unsuccessfully tried for some time, I decided to start building dashboard from last visual. This helped me to build on complexity and when I worked on first visual (at last) I managed to buld it smoothly and also made it better by removing button. 
-- At this stage, I realised that some data for branches are duplicated. There was no pattern to it so I drilled down into where are these data coming from and found that I need to remove duplicated in data cleaning process.
+    - At this stage, I realised that some data for branches are duplicated. There was no pattern to it so I drilled down into where are these data coming from and found that I need to remove duplicated in data cleaning process.
 - When I deployed my project, CSS was not showing. Teached fortunatelly helped me to resolve this and recommended whitenoise library that resolved this issue
 ---
 ## List of known issues
